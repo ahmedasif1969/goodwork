@@ -82,6 +82,7 @@ let browser;
   );
   await page.getByRole("button", { name: "Pause background motion" }).click();
   const paused = await idle();
+  await page.waitForTimeout(500); // Allow the clicked control's CSS transition to settle.
   const hero = page.locator(".hero");
   assert.equal(
     await hero.evaluate((e) => getComputedStyle(e).backgroundColor),
@@ -197,3 +198,4 @@ let browser;
   .finally(async () => {
     if (browser) await browser.close();
   });
+

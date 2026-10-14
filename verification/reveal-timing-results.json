@@ -1,0 +1,16 @@
+[
+  {
+    "mobile": false,
+    "heroDeltaY": 23,
+    "heroDeltaAngle": "2.41",
+    "individualReveals": "not applicable",
+    "errors": []
+  },
+  {
+    "mobile": true,
+    "heroDeltaY": 20,
+    "heroDeltaAngle": "2.13",
+    "individualReveals": "passed",
+    "errors": []
+  }
+]

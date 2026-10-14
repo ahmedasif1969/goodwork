@@ -162,13 +162,20 @@ export function useSiteMotion(root: RefObject<HTMLDivElement | null>) {
           drift.push(
             gsap.fromTo(
               select(".horizon-drift"),
-              { xPercent: -2.5, y: -6, scaleX: 0.98, rotation: -0.7 },
               {
-                xPercent: 3,
-                y: 12,
-                scaleX: 1.055,
-                rotation: 0.7,
-                duration: 8.5,
+                xPercent: -6,
+                y: -24,
+                scaleX: 0.94,
+                scaleY: 0.9,
+                rotation: -2.5,
+              },
+              {
+                xPercent: 6,
+                y: 24,
+                scaleX: 1.08,
+                scaleY: 1.1,
+                rotation: 2.5,
+                duration: 5.5,
                 ease: "sine.inOut",
                 repeat: -1,
                 yoyo: true,
@@ -271,7 +278,7 @@ export function useSiteMotion(root: RefObject<HTMLDivElement | null>) {
               ease: "power3.out",
               scrollTrigger: {
                 trigger: element,
-                start: "top 91%",
+                start: fullMotion ? "top 88%" : "top 80%",
                 toggleActions: "play none none reverse",
               },
             });
@@ -286,35 +293,29 @@ export function useSiteMotion(root: RefObject<HTMLDivElement | null>) {
                 ease: "power3.out",
                 scrollTrigger: {
                   trigger: element,
-                  start: "top 92%",
+                  start: fullMotion ? "top 90%" : "top 82%",
                   toggleActions: "play none none reverse",
                 },
               });
             },
           );
-          gsap.from(select(".service-card"), {
-            y: 22,
-            opacity: 0.55,
-            duration: 0.8,
-            stagger: fullMotion ? 0.1 : 0.05,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: select(".services-grid")[0],
-              start: "top 89%",
-              toggleActions: "play none none reverse",
+          // Trigger each item independently: stacked mobile cards must wait for
+          // their own viewport entry rather than playing with the entire group.
+          select(".service-card, .approach-grid > li").forEach(
+            (element: HTMLElement) => {
+              gsap.from(element, {
+                y: 24,
+                opacity: 0.4,
+                duration: 0.85,
+                ease: "power3.out",
+                scrollTrigger: {
+                  trigger: element,
+                  start: fullMotion ? "top 88%" : "top 80%",
+                  toggleActions: "play none none reverse",
+                },
+              });
             },
-          });
-          gsap.from(select(".approach-grid > li"), {
-            y: 16,
-            opacity: 0.55,
-            duration: 0.7,
-            stagger: 0.07,
-            scrollTrigger: {
-              trigger: select(".approach-grid")[0],
-              start: "top 88%",
-              toggleActions: "play none none reverse",
-            },
-          });
+          );
           gsap.from(select(".footer-wordmark"), {
             y: 24,
             opacity: 0.3,
