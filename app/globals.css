@@ -141,9 +141,12 @@ ol {
   inset: -5%;
 }
 .aurora-scroll {
+  will-change: transform, opacity;
   opacity: 0.4;
 }
 .aurora-svg {
+  display: block;
+  object-fit: fill;
   width: 100%;
   height: 100%;
   overflow: visible;
@@ -2713,6 +2716,7 @@ textarea::placeholder {
   .aurora-idle {
     transform: none !important;
   }
+  .aurora-scroll,
   .aurora-idle {
     will-change: auto;
   }

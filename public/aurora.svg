@@ -1,0 +1,80 @@
+<svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 1000 1000"
+            preserveAspectRatio="none"
+            fill="none"
+          >
+            <defs>
+              <path
+                id="path"
+                
+                d="M1080 -120 C1000 180 780 180 860 400 S140 700 200 1120"
+              />
+              <linearGradient
+                id="light"
+                x1="0"
+                y1="0"
+                x2="0"
+                y2="1000"
+                gradientUnits="userSpaceOnUse"
+              >
+                <stop stop-color="#7954b7" stop-opacity="0" />
+                <stop offset=".16" stop-color="#7954b7" stop-opacity=".45" />
+                <stop offset=".42" stop-color="#b48ce3" stop-opacity=".85" />
+                <stop offset=".66" stop-color="#8152bb" stop-opacity=".7" />
+                <stop offset=".86" stop-color="#683a9f" stop-opacity=".35" />
+                <stop offset="1" stop-color="#683a9f" stop-opacity="0" />
+              </linearGradient>
+              <filter
+                id="halo"
+                filterUnits="userSpaceOnUse"
+                x="-250"
+                y="-250"
+                width="1500"
+                height="1500"
+              >
+                <feGaussianBlur stdDeviation="25" />
+              </filter>
+              <filter
+                id="mist"
+                filterUnits="userSpaceOnUse"
+                x="-250"
+                y="-250"
+                width="1500"
+                height="1500"
+              >
+                <feGaussianBlur stdDeviation="10" />
+              </filter>
+              <filter
+                id="filament"
+                filterUnits="userSpaceOnUse"
+                x="-250"
+                y="-250"
+                width="1500"
+                height="1500"
+              >
+                <feGaussianBlur stdDeviation="2.3" />
+              </filter>
+            </defs>
+            <use
+              href="#path"
+              stroke="url(#light)"
+              stroke-width="135"
+              opacity=".6"
+              filter="url(#halo)"
+            />
+            <use
+              href="#path"
+              stroke="url(#light)"
+              stroke-width="34"
+              opacity=".32"
+              filter="url(#mist)"
+            />
+            <use
+              href="#path"
+              stroke="url(#light)"
+              stroke-width="3"
+              opacity=".42"
+              filter="url(#filament)"
+            />
+          </svg>

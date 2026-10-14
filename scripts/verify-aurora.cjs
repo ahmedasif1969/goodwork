@@ -8,7 +8,6 @@ let browser;
   browser = await chromium.launch({
     channel: "msedge",
     headless: true,
-    args: ["--disable-gpu"],
   });
   const page = await browser.newPage({
     viewport: { width: 1536, height: 950 },
@@ -26,14 +25,29 @@ let browser;
   );
   const idle = () =>
     page.locator(".aurora-idle").evaluate((e) => getComputedStyle(e).transform);
-  const d0 = await page.locator(".aurora-path").getAttribute("d");
+  const scrollState = () =>
+    page
+      .locator(".aurora-scroll")
+      .evaluate((e) =>
+        Array.from(
+          new DOMMatrix(getComputedStyle(e).transform).toFloat64Array(),
+        ),
+      );
+  const d0 = await scrollState();
+  assert.equal(
+    await page
+      .locator(".aurora-svg")
+      .evaluate((e) => e.complete && e.naturalWidth > 0),
+    true,
+  );
+  assert.equal(await page.locator(".aurora-path").count(), 0);
   await page.screenshot({ path: "verification/aurora-hero.png" });
   await page
     .locator("#services")
     .evaluate((e) => e.scrollIntoView({ block: "start", behavior: "instant" }));
   await page.waitForTimeout(1500);
-  const d1 = await page.locator(".aurora-path").getAttribute("d");
-  assert.notEqual(d1, d0, "Ribbon must bend with scroll");
+  const d1 = await scrollState();
+  assert.notDeepEqual(d1, d0, "Ribbon must move with scroll");
   const t0 = await idle();
   await page.waitForTimeout(550);
   assert.notEqual(
@@ -54,17 +68,16 @@ let browser;
   await page.screenshot({ path: "verification/aurora-contact.png" });
   await page.evaluate(() => scrollTo({ top: 0, behavior: "instant" }));
   await page.waitForTimeout(1600);
-  const nums = (s) => s.match(/-?\d+(?:\.\d+)?/g).map(Number);
   await page.waitForFunction(
     (expected) => {
-      const d = document
-        .querySelector(".aurora-path")
-        .getAttribute("d")
-        .match(/-?\d+(?:\.\d+)?/g)
-        .map(Number);
-      return expected.every((n, i) => Math.abs(n - d[i]) < 0.5);
+      const matrix = Array.from(
+        new DOMMatrix(
+          getComputedStyle(document.querySelector(".aurora-scroll")).transform,
+        ).toFloat64Array(),
+      );
+      return expected.every((n, i) => Math.abs(n - matrix[i]) < 0.5);
     },
-    nums(d0),
+    d0,
     { timeout: 10000 },
   );
   await page.getByRole("button", { name: "Pause background motion" }).click();
@@ -77,12 +90,12 @@ let browser;
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.waitForTimeout(200);
   assert.equal(await idle(), "none");
-  const reduced = await page.locator(".aurora-path").getAttribute("d");
+  const reduced = await scrollState();
   await page
     .locator("#services")
     .evaluate((e) => e.scrollIntoView({ block: "start", behavior: "instant" }));
   await page.waitForTimeout(300);
-  assert.equal(await page.locator(".aurora-path").getAttribute("d"), reduced);
+  assert.deepEqual(await scrollState(), reduced);
   for (const width of [1920, 1366, 768, 390, 320]) {
     await page.setViewportSize({ width, height: 900 });
     await page.waitForTimeout(300);
@@ -103,15 +116,15 @@ let browser;
   await page.screenshot({ path: "verification/aurora-mobile-work.png" });
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.waitForTimeout(400);
-  const mobileD = await page.locator(".aurora-path").getAttribute("d");
+  const mobileD = await scrollState();
   await page
     .locator("#services")
     .evaluate((e) => e.scrollIntoView({ block: "start", behavior: "instant" }));
   await page.waitForTimeout(1000);
-  assert.equal(
-    await page.locator(".aurora-path").getAttribute("d"),
+  assert.notDeepEqual(
+    await scrollState(),
     mobileD,
-    "Mobile should use cached geometry",
+    "Mobile must share scroll motion",
   );
   const menu = page.locator(".menu-toggle");
   await menu.click();
@@ -126,12 +139,13 @@ let browser;
   const result = {
     singleRibbon: true,
     pointerEventsNone: true,
-    scrollBending: true,
-    scrollUpRestoresGeometry: true,
+    scrollTransforms: true,
+    scrollUpRestoresPosition: true,
     idleDriftBelowHero: true,
     pauseResume: true,
     reducedMotion: true,
-    mobileUsesCachedGeometry: true,
+    sharedMobileDesktopMotion: true,
+    immutableExternalArtwork: true,
     noOverflow: true,
     mobileNavigation: true,
     serviceInteraction: true,
