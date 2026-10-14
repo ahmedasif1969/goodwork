@@ -110,6 +110,54 @@ ol {
   position: relative;
   background: var(--background);
   overflow: clip;
+  isolation: isolate;
+}
+.site-shell > main,
+.site-shell > footer {
+  position: relative;
+  z-index: 1;
+}
+.page-aurora {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  contain: strict;
+  mask-image: linear-gradient(
+    90deg,
+    black,
+    black 18%,
+    #0005 38%,
+    #0005 62%,
+    black 82%,
+    black
+  );
+}
+.aurora-scroll,
+.aurora-idle {
+  position: absolute;
+  inset: -5%;
+}
+.aurora-scroll {
+  opacity: 0.4;
+}
+.aurora-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.aurora-running .aurora-idle {
+  will-change: transform;
+}
+@media (max-width: 799px) {
+  .page-aurora {
+    mask-image: linear-gradient(90deg, black, #0005 40%, #0005 60%, black);
+  }
+  .aurora-scroll {
+    opacity: 0.32;
+  }
 }
 .skip-link {
   position: fixed;
@@ -2661,6 +2709,13 @@ textarea::placeholder {
   }
 }
 @media (prefers-reduced-motion: reduce) {
+  .aurora-scroll,
+  .aurora-idle {
+    transform: none !important;
+  }
+  .aurora-idle {
+    will-change: auto;
+  }
   .motion-control {
     display: none !important;
   }

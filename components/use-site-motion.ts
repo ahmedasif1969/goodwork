@@ -149,9 +149,67 @@ export function useSiteMotion(root: RefObject<HTMLDivElement | null>) {
               paused: true,
             }),
           );
+          const auroraDrift = gsap.to(select(".aurora-idle"), {
+            x: fullMotion ? 14 : 5,
+            y: -9,
+            scale: 1.025,
+            duration: 34,
+            ease: "sine.inOut",
+            repeat: -1,
+            yoyo: true,
+            paused: true,
+          });
+          const aurora = gsap.timeline({
+            scrollTrigger: {
+              start: 0,
+              end: "max",
+              scrub: fullMotion ? 0.8 : 0.45,
+              invalidateOnRefresh: true,
+            },
+          });
+          aurora.fromTo(
+            select(".aurora-scroll"),
+            { opacity: 0.08 },
+            { opacity: 0.6, duration: 0.16, ease: "none" },
+            0,
+          );
+          if (fullMotion) {
+            // Every keyframe has identical SVG commands; GSAP interpolates the numbers
+            // directly. No morph plugin, scroll listeners, or page-sized blur surface.
+            const bends = [
+              "M1080 -120 C1000 180 780 180 860 400 S140 700 200 1120",
+              "M760 -120 C560 180 140 180 220 400 S940 700 780 1120",
+              "M140 -120 C260 180 940 180 780 400 S100 700 340 1120",
+              "M900 -120 C820 180 200 180 300 400 S940 700 800 1120",
+              "M180 -120 C300 180 920 180 740 400 S160 700 240 1120",
+              "M800 -120 C700 180 160 180 280 400 S840 700 700 1120",
+            ];
+            bends.slice(1).forEach((d, index) => {
+              aurora.to(
+                select(".aurora-path"),
+                { attr: { d }, duration: 0.2, ease: "none" },
+                index * 0.2,
+              );
+            });
+          } else {
+            aurora.to(
+              select(".aurora-scroll"),
+              { xPercent: -7, yPercent: -3, duration: 1, ease: "none" },
+              0,
+            );
+          }
+          aurora.to(
+            select(".aurora-scroll"),
+            { opacity: 0.38, duration: 0.2, ease: "none" },
+            0.8,
+          );
           let heroVisible = true;
           hero.classList.add("ambient-ready");
           const syncAmbient = () => {
+            const allowed = !document.hidden && !paused.current;
+            scope.classList.toggle("aurora-running", allowed);
+            if (allowed) auroraDrift.play();
+            else auroraDrift.pause();
             const playing = heroVisible && !document.hidden && !paused.current;
             hero.classList.toggle("ambient-running", playing);
             drift.forEach((tween) => {
@@ -283,6 +341,7 @@ export function useSiteMotion(root: RefObject<HTMLDivElement | null>) {
           return () => {
             document.removeEventListener("visibilitychange", syncAmbient);
             hero.classList.remove("ambient-running", "ambient-ready");
+            scope.classList.remove("aurora-running");
             liveSync.current = null;
           };
         },

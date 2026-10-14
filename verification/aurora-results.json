@@ -1,0 +1,14 @@
+{
+  "singleRibbon": true,
+  "pointerEventsNone": true,
+  "scrollBending": true,
+  "scrollUpRestoresGeometry": true,
+  "idleDriftBelowHero": true,
+  "pauseResume": true,
+  "reducedMotion": true,
+  "mobileUsesCachedGeometry": true,
+  "noOverflow": true,
+  "mobileNavigation": true,
+  "serviceInteraction": true,
+  "runtimeErrors": []
+}

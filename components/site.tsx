@@ -14,6 +14,7 @@ import { Navigation, navigation } from "./navigation";
 import { ContactForm } from "./contact-form";
 import { HeroAtmosphere, Horizon } from "./horizon";
 import { useSiteMotion } from "./use-site-motion";
+import { PageAurora } from "./page-aurora";
 
 function ProjectPreview({ project }: { project: (typeof projects)[number] }) {
   const [failed, setFailed] = useState(false);
@@ -98,6 +99,7 @@ export function Site() {
   const { ambientPaused, toggleAmbient } = useSiteMotion(root);
   return (
     <div className="site-shell" ref={root}>
+      <PageAurora />
       <a className="skip-link" href="#main-content">
         Skip to content
       </a>
