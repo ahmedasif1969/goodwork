@@ -341,7 +341,7 @@ ol {
 }
 .horizon-atmosphere {
   position: absolute;
-  width: min(1080px, 120%);
+  width: 140%;
   height: 300px;
   left: 50%;
   top: 10px;
@@ -358,8 +358,8 @@ ol {
 .horizon-light {
   position: absolute;
   overflow: visible;
-  width: min(1000px, 110%);
-  height: auto;
+  width: 140%;
+  height: 330px;
   max-width: none;
   top: 0;
   left: 50%;
@@ -1273,7 +1273,7 @@ select[aria-invalid="true"] {
   border-radius: 50%;
 }
 .ambient-field-violet {
-  width: min(1120px, 125vw);
+  width: 150vw;
   height: 620px;
   left: 50%;
   bottom: -205px;
@@ -1288,7 +1288,7 @@ select[aria-invalid="true"] {
   filter: blur(32px);
 }
 .ambient-field-plum {
-  width: min(820px, 95vw);
+  width: 95vw;
   height: 440px;
   left: 6%;
   bottom: -50px;
@@ -1301,7 +1301,7 @@ select[aria-invalid="true"] {
   filter: blur(42px);
 }
 .ambient-field-lilac {
-  width: min(650px, 75vw);
+  width: 80vw;
   height: 410px;
   left: 49%;
   bottom: -28px;
@@ -1999,7 +1999,8 @@ textarea:focus {
     height: 245px;
   }
   .horizon-light {
-    width: 700px;
+    width: 160%;
+    height: 245px;
   }
   .hero-bottom {
     padding-top: 150px;
@@ -2249,7 +2250,7 @@ textarea:focus {
     top: 400px;
   }
   .horizon-light {
-    width: 620px;
+    width: 185%;
   }
   .hero-bottom {
     font-size: 11px;

@@ -27,7 +27,7 @@ export function Horizon() {
       <div className="horizon-motion">
         <div className="horizon-reveal">
           <div className="horizon-atmosphere" />
-          <svg className="horizon-light" viewBox="0 0 1000 360" fill="none">
+          <svg className="horizon-light" viewBox="0 0 1000 360" preserveAspectRatio="none" fill="none">
             <defs>
               <linearGradient
                 id={`${id}-violet`}
