@@ -299,6 +299,8 @@ ol {
   display: none;
 }
 .hero {
+  /* Opaque backing prevents the page ribbon showing through on reverse scroll. */
+  background: var(--background);
   min-height: 660px;
   position: relative;
   isolation: isolate;
@@ -385,6 +387,13 @@ ol {
     black 65%,
     transparent
   );
+}
+.horizon-drift {
+  position: absolute;
+  inset: 0;
+}
+.ambient-running .horizon-drift {
+  will-change: transform;
 }
 .horizon-motion {
   position: absolute;
@@ -2737,6 +2746,7 @@ textarea::placeholder {
     opacity: 1 !important;
     transform: none !important;
   }
+  .horizon-drift,
   .horizon-motion {
     transform: none !important;
   }

@@ -138,16 +138,43 @@ export function useSiteMotion(root: RefObject<HTMLDivElement | null>) {
             fullMotion ? ".ambient-layer" : ".ambient-layer-violet",
           ) as HTMLElement[];
           const drift = fields.map((field, index) =>
-            gsap.to(field, {
-              x: fullMotion ? [24, -32, 18][index] : 10,
-              y: fullMotion ? [-18, 14, -12][index] : -8,
-              scale: fullMotion ? [1.06, 1.09, 1.04][index] : 1.035,
-              duration: [23, 31, 37][index],
-              ease: "sine.inOut",
-              repeat: -1,
-              yoyo: true,
-              paused: true,
-            }),
+            gsap.fromTo(
+              field,
+              {
+                xPercent: [-5, 7, -6][index],
+                y: [-10, 12, -8][index],
+                scale: 1,
+              },
+              {
+                xPercent: [6, -8, 9][index],
+                y: [20, -22, 16][index],
+                scale: [1.08, 1.12, 1.06][index],
+                duration: [9, 12, 10.5][index],
+                ease: "sine.inOut",
+                repeat: -1,
+                yoyo: true,
+                paused: true,
+              },
+            ),
+          );
+          // Give the dominant hero glow its own motion wrapper; entrance and
+          // scroll transforms remain on their existing, separate wrappers.
+          drift.push(
+            gsap.fromTo(
+              select(".horizon-drift"),
+              { xPercent: -2.5, y: -6, scaleX: 0.98, rotation: -0.7 },
+              {
+                xPercent: 3,
+                y: 12,
+                scaleX: 1.055,
+                rotation: 0.7,
+                duration: 8.5,
+                ease: "sine.inOut",
+                repeat: -1,
+                yoyo: true,
+                paused: true,
+              },
+            ),
           );
           const auroraDrift = gsap.to(select(".aurora-idle"), {
             xPercent: 1,

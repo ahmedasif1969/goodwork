@@ -82,11 +82,42 @@ let browser;
   );
   await page.getByRole("button", { name: "Pause background motion" }).click();
   const paused = await idle();
+  const hero = page.locator(".hero");
+  assert.equal(
+    await hero.evaluate((e) => getComputedStyle(e).backgroundColor),
+    "rgb(5, 5, 7)",
+  );
+  const bounds = await hero.boundingBox();
+  const clip = {
+    x: 0,
+    y: Math.max(0, bounds.y),
+    width: 1536,
+    height: Math.min(bounds.height, 950 - Math.max(0, bounds.y)),
+  };
+  await page.locator(".page-aurora").evaluate((e) => (e.style.opacity = "0"));
+  const withoutRibbon = await page.screenshot({ clip });
+  await page.locator(".page-aurora").evaluate((e) => (e.style.opacity = "1"));
+  const withRibbon = await page.screenshot({ clip });
+  assert.equal(
+    withoutRibbon.equals(withRibbon),
+    true,
+    "Ribbon must never paint inside hero",
+  );
+  await page
+    .locator(".page-aurora")
+    .evaluate((e) => e.style.removeProperty("opacity"));
+  const glow = () =>
+    page
+      .locator(".horizon-drift")
+      .evaluate((e) => getComputedStyle(e).transform);
+  const pausedGlow = await glow();
   await page.waitForTimeout(500);
   assert.equal(await idle(), paused);
+  assert.equal(await glow(), pausedGlow);
   await page.getByRole("button", { name: "Resume background motion" }).click();
   await page.waitForTimeout(500);
   assert.notEqual(await idle(), paused);
+  assert.notEqual(await glow(), pausedGlow, "Main hero glow must visibly move");
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.waitForTimeout(200);
   assert.equal(await idle(), "none");
@@ -137,6 +168,8 @@ let browser;
   );
   assert.deepEqual(errors, []);
   const result = {
+    heroExcludesRibbon: true,
+    mainHeroGlowMoves: true,
     singleRibbon: true,
     pointerEventsNone: true,
     scrollTransforms: true,

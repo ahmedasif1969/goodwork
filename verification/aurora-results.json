@@ -1,4 +1,6 @@
 {
+  "heroExcludesRibbon": true,
+  "mainHeroGlowMoves": true,
   "singleRibbon": true,
   "pointerEventsNone": true,
   "scrollTransforms": true,
