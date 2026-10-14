@@ -13,6 +13,8 @@ npm run dev
 
 Open http://127.0.0.1:3000. For production, run `npm run build` then `npm start`, or deploy the repository to Vercel with its Next.js preset.
 
+`vercel.json` explicitly selects the Next.js framework, runs the production build, and restores the framework's default output directory. In Vercel, keep **Root Directory** at the repository root (blank / `.`), and deploy the `main` branch. Do not set Root Directory or Output Directory to `public`: it contains images, not the application's homepage or API routes. If the deployment serves images but returns Vercel `NOT_FOUND` for `/`, confirm these settings and redeploy the latest commit.
+
 ## Contact delivery
 
 Copy `.env.example` to `.env.local` and configure:
