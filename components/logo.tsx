@@ -14,7 +14,7 @@ export function Logo() {
           strokeWidth="2"
         />
         <path
-          d="M15 9 10 12v6l5 3 5-3v-3h-5M15 3v6"
+          d="M15 9 10 12v6l5 3 5-3v-3h-5"
           stroke="currentColor"
           strokeWidth="2"
           strokeLinejoin="round"
